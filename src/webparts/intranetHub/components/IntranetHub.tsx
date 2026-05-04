@@ -22,6 +22,7 @@ export interface IIntranetHubProps {
     kudosLikes: string;
     polls: string;
     events: string;
+    employeeOfMonth: string;
   };
   widgetDescriptions: {
     announcements: string;

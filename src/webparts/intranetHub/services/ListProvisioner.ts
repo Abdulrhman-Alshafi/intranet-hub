@@ -2,6 +2,7 @@ import { SPFI } from '@pnp/sp';
 import '@pnp/sp/webs';
 import '@pnp/sp/lists';
 import '@pnp/sp/fields';
+import '@pnp/sp/views';
 
 interface IFieldDefinition {
   title: string;
@@ -34,7 +35,7 @@ const LIST_DEFINITIONS: Record<string, IListDefinition> = {
     fields: [
       { title: 'Recipient', internalName: 'Recipient', type: 'User', required: true },
       { title: 'GivenBy', internalName: 'GivenBy', type: 'User', required: true },
-      { title: 'IsEmployeeOfMonth', internalName: 'IsEmployeeOfMonth', type: 'Boolean', defaultValue: '0' },
+      { title: 'IsHidden', internalName: 'IsHidden', type: 'Boolean', defaultValue: '0' },
       { title: 'ProfileImage', internalName: 'ProfileImage', type: 'Thumbnail' },
     ]
   },
@@ -65,6 +66,14 @@ const LIST_DEFINITIONS: Record<string, IListDefinition> = {
       { title: 'Location', internalName: 'Location', type: 'Text' },
       { title: 'Category', internalName: 'Category', type: 'Choice', choices: ['Wellness', 'Company', 'Learning', 'Social'] },
       { title: 'Image', internalName: 'Image', type: 'Thumbnail' },
+    ]
+  },
+  employeeOfMonth: {
+    title: 'Employee of Month',
+    fields: [
+      { title: 'Employee', internalName: 'Employee', type: 'User', required: true },
+      { title: 'Month', internalName: 'Month', type: 'Text', required: true },
+      { title: 'Notes', internalName: 'Notes', type: 'Note' },
     ]
   }
 };
@@ -158,6 +167,13 @@ export class ListProvisioner {
       if (field.title !== field.internalName) {
         const createdField = list.fields.getByInternalNameOrTitle(field.internalName);
         await createdField.update({ Title: field.title });
+      }
+
+      // Add the new field to the default view so it is visible in the list UI
+      try {
+        await list.defaultView.fields.add(field.internalName);
+      } catch {
+        // Non-fatal: view may already contain the field or view operations not supported
       }
     } catch (err) {
       console.error(`[ListProvisioner] Failed to create field "${field.internalName}":`, err);

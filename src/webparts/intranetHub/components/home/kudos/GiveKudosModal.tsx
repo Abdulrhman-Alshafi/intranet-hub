@@ -205,7 +205,8 @@ const GiveKudosModal: React.FC<IProps> = ({ isOpen, onClose, onAdded }) => {
           />
         </div>
 
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', alignItems: 'center' }}>
+
           <button onClick={handleClose} style={{ padding: '10px 20px', border: '1px solid #e2e8f0', borderRadius: 10, background: '#fff', fontSize: 14, cursor: 'pointer' }}>
             Cancel
           </button>

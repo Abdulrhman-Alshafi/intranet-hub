@@ -15,6 +15,7 @@ export interface IWebPartContextValue {
     kudosLikes: string;
     polls: string;
     events: string;
+    employeeOfMonth: string;
   };
   widgetDescriptions: {
     announcements: string;
@@ -36,6 +37,7 @@ const defaultContextValue: IWebPartContextValue = {
     kudosLikes: 'Kudos Likes',
     polls: 'Polls',
     events: 'Events',
+    employeeOfMonth: 'Employee of Month',
   },
   widgetDescriptions: {
     announcements: '',

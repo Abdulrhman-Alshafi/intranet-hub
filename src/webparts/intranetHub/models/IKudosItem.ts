@@ -5,7 +5,7 @@ export interface IKudosItem {
   Recipient?: { Title: string; EMail: string };
   GivenById: number;
   GivenBy?: { Title: string; EMail: string };
-  IsEmployeeOfMonth: boolean;
+  IsHidden?: boolean;
   ProfileImage?: string;
   Created: string;
   LikesCount?: number;

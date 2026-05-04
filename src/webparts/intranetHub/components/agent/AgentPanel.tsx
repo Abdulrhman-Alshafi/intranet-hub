@@ -2,6 +2,12 @@ import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './AgentPanel.module.scss';
 
+const IconBot: React.FC<{ size?: number }> = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor">
+    <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7v2a2 2 0 0 1-2 2h-1v1a1 1 0 0 1-2 0v-1H8v1a1 1 0 0 1-2 0v-1H5a2 2 0 0 1-2-2v-2a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2zm-3 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" />
+  </svg>
+);
+
 interface IChatMessage {
   id: string;
   text: string;
@@ -10,11 +16,9 @@ interface IChatMessage {
 }
 
 const SUGGESTIONS = [
-  { icon: '📅', text: "What's happening this week?" },
-  { icon: '📋', text: 'Find company policies' },
-  { icon: '💻', text: 'Who can help with IT support?' },
-  { icon: '📊', text: 'Show me payroll calendar' },
-  { icon: '✈️', text: 'How do I request PTO?' },
+  { text: "What's happening this week?" },
+  { text: 'Find company policies' },
+  { text: 'How do I request PTO?' },
 ];
 
 const AgentPanel: React.FC = () => {
@@ -82,57 +86,40 @@ const AgentPanel: React.FC = () => {
 
   return (
     <div className={styles.panel}>
-      {/* Header – hidden once conversation starts */}
-      <AnimatePresence>
-        {messages.length === 0 && (
-          <motion.div
-            className={styles.header}
-            initial={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0, overflow: 'hidden' }}
-            transition={{ duration: 0.25 }}
-          >
-            <div className={styles.botAvatar}>
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                <rect width="32" height="32" rx="16" fill="url(#agent-gradient)"/>
-                <path d="M11 14C11 13.45 11.45 13 12 13C12.55 13 13 13.45 13 14C13 14.55 12.55 15 12 15C11.45 15 11 14.55 11 14Z" fill="white"/>
-                <path d="M19 14C19 13.45 19.45 13 20 13C20.55 13 21 13.45 21 14C21 14.55 20.55 15 20 15C19.45 15 19 14.55 19 14Z" fill="white"/>
-                <path d="M13 19C14 20.33 18 20.33 19 19" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M10 11V9M22 11V9M9 12C8 12 7 13 7 14V18C7 19 8 20 9 20M23 12C24 12 25 13 25 14V18C25 19 24 20 23 20" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-                <defs>
-                  <linearGradient id="agent-gradient" x1="0" y1="0" x2="32" y2="32">
-                    <stop stopColor="#6366f1"/>
-                    <stop offset="1" stopColor="#8b5cf6"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <div className={styles.headerText}>
-              <h3 className={styles.headerTitle}>Hi! I&apos;m your AI assistant.</h3>
-              <p className={styles.headerSub}>How can I help you today?</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Chat Area */}
       <div className={styles.chatArea} ref={chatAreaRef}>
         {messages.length === 0 && (
-          <div className={styles.suggestions}>
-            {SUGGESTIONS.map((s, i) => (
-              <motion.button
-                key={i}
-                className={styles.suggestionBtn}
-                onClick={() => handleSend(s.text)}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05, duration: 0.2 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className={styles.suggestionIcon}>{s.icon}</span>
-                <span>{s.text}</span>
-              </motion.button>
-            ))}
+          <div className={styles.welcome}>
+            <motion.div
+              className={styles.welcomeInner}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className={styles.botAvatar}>
+                <IconBot size={32} />
+              </div>
+              <div className={styles.headerText}>
+                <h3 className={styles.headerTitle}>Hi! I&apos;m your AI assistant.</h3>
+                <p className={styles.headerSub}>How can I help you today?</p>
+              </div>
+              <div className={styles.suggestions}>
+                {SUGGESTIONS.map((s, i) => (
+                  <motion.button
+                    key={i}
+                    className={styles.suggestionBtn}
+                    onClick={() => handleSend(s.text)}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.07, duration: 0.2 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span>{s.text}</span>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
           </div>
         )}
 
@@ -146,7 +133,7 @@ const AgentPanel: React.FC = () => {
               transition={{ duration: 0.2 }}
             >
               {!msg.isUser && (
-                <div className={styles.msgAvatar}>🤖</div>
+                <div className={styles.msgAvatar}><IconBot size={16} /></div>
               )}
               <div className={styles.msgBubble}>
                 {msg.text}
@@ -161,7 +148,7 @@ const AgentPanel: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <div className={styles.msgAvatar}>🤖</div>
+            <div className={styles.msgAvatar}><IconBot size={16} /></div>
             <div className={styles.typingIndicator}>
               <span className={styles.dot} />
               <span className={styles.dot} />

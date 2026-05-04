@@ -24,6 +24,7 @@ export interface IIntranetHubWebPartProps {
   kudosLikesListName: string;
   pollsListName: string;
   eventsListName: string;
+  employeeOfMonthListName: string;
   // Widget descriptions for AI agent
   announcementsDescription: string;
   recognitionWallDescription: string;
@@ -72,6 +73,7 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
           kudosLikes: this.properties.kudosLikesListName || 'Kudos Likes',
           polls: this.properties.pollsListName || 'Polls',
           events: this.properties.eventsListName || 'Events',
+          employeeOfMonth: this.properties.employeeOfMonthListName || 'Employee of Month',
         },
         widgetDescriptions: {
           announcements: this.properties.announcementsDescription || '',
@@ -105,6 +107,7 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
           kudosLikes: this.properties.kudosLikesListName || 'Kudos Likes',
           polls: this.properties.pollsListName || 'Polls',
           events: this.properties.eventsListName || 'Events',
+          employeeOfMonth: this.properties.employeeOfMonthListName || 'Employee of Month',
         });
         this._provisioned = true;
       }

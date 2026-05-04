@@ -18,23 +18,12 @@ export class KudosService {
 
   public async getKudos(top: number = 20): Promise<IKudosItem[]> {
     const items = await this.sp.web.lists.getByTitle(this.kudosListName).items
-      .select('Id', 'Title', 'RecipientId', 'Recipient/Title', 'Recipient/EMail', 'GivenById', 'GivenBy/Title', 'GivenBy/EMail', 'IsEmployeeOfMonth', 'ProfileImage', 'Created')
+      .select('Id', 'Title', 'RecipientId', 'Recipient/Title', 'Recipient/EMail', 'GivenById', 'GivenBy/Title', 'GivenBy/EMail', 'IsHidden', 'ProfileImage', 'Created')
       .expand('Recipient', 'GivenBy')
       .orderBy('Created', false)
       .top(top)();
 
     return items as IKudosItem[];
-  }
-
-  public async getEmployeeOfMonth(): Promise<IKudosItem | null> {
-    const items = await this.sp.web.lists.getByTitle(this.kudosListName).items
-      .select('Id', 'Title', 'RecipientId', 'Recipient/Title', 'Recipient/EMail', 'GivenById', 'GivenBy/Title', 'GivenBy/EMail', 'IsEmployeeOfMonth', 'ProfileImage', 'Created')
-      .expand('Recipient', 'GivenBy')
-      .filter('IsEmployeeOfMonth eq 1')
-      .orderBy('Created', false)
-      .top(1)();
-
-    return items.length > 0 ? items[0] as IKudosItem : null;
   }
 
   public async addKudos(data: { Title: string; RecipientId: number }): Promise<void> {
@@ -43,7 +32,6 @@ export class KudosService {
       Title: data.Title,
       RecipientId: data.RecipientId,
       GivenById: currentUser.Id,
-      IsEmployeeOfMonth: false,
     });
   }
 
@@ -93,4 +81,13 @@ export class KudosService {
       return true;
     }
   }
+
+  public async deleteKudos(id: number): Promise<void> {
+    await this.sp.web.lists.getByTitle(this.kudosListName).items.getById(id).delete();
+  }
+
+  public async hideKudos(id: number, hidden: boolean): Promise<void> {
+    await this.sp.web.lists.getByTitle(this.kudosListName).items.getById(id).update({ IsHidden: hidden });
+  }
+
 }
