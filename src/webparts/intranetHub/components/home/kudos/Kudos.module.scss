@@ -1,0 +1,23 @@
+.widget { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.title { font-size: 16px; font-weight: 700; color: #0f172a; margin: 0; }
+.number { color: #64748b; margin-right: 4px; }
+.giveBtn { padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; &:hover { background: #1d4ed8; } }
+.seeAllBtn { padding: 8px 12px; border: 1px solid #e2e8f0; background: #fff; border-radius: 10px; font-size: 13px; cursor: pointer; color: #334155; &:hover { background: #f1f5f9; } }
+.body { display: flex; gap: 16px; flex: 1; overflow: hidden; }
+.eomSection { flex: 0 0 180px; }
+.eomTitle { font-size: 13px; font-weight: 600; color: #64748b; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.eomCard { text-align: center; padding: 16px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 16px; }
+.eomAvatar { width: 64px; height: 64px; border-radius: 50%; background: #fff; margin: 0 auto 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 28px; img { width: 100%; height: 100%; object-fit: cover; } }
+.eomName { font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 2px; }
+.eomRole { font-size: 12px; color: #64748b; margin: 0; }
+.kudosFeed { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.kudosCard { display: flex; gap: 10px; padding: 10px; border-radius: 10px; border: 1px solid #f1f5f9; transition: background 0.1s; &:hover { background: #f8fafc; } }
+.kudosAvatar { width: 36px; height: 36px; border-radius: 50%; background: #eff6ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; overflow: hidden; img { width: 100%; height: 100%; object-fit: cover; } }
+.kudosContent { flex: 1; min-width: 0; }
+.kudosHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; strong { font-size: 13px; color: #0f172a; } }
+.kudosTime { font-size: 11px; color: #94a3b8; }
+.kudosMsg { font-size: 12px; color: #64748b; margin: 0 0 2px; }
+.kudosRecipient { font-size: 12px; color: #2563eb; font-weight: 500; }
+.likeBtn { border: none; background: none; cursor: pointer; font-size: 12px; padding: 4px 8px; border-radius: 8px; transition: background 0.1s; &:hover { background: #fef2f2; } }
+.liked { color: #ef4444; }

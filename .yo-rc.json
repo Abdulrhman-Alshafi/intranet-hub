@@ -1,0 +1,23 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "whichFolder": "subdir",
+    "solutionName": "intranet-hub",
+    "environment": "spo",
+    "packageManager": "npm",
+    "skipFeatureDeployment": true,
+    "useGulp": false,
+    "componentType": "webpart",
+    "template": "react",
+    "componentName": "IntranetHub",
+    "componentDescription": "Company Intranet Hub Portal",
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.22.0",
+    "sdksVersions": {},
+    "version": "1.22.2",
+    "libraryName": "intranet-hub",
+    "libraryId": "3764b89e-eee9-452a-8b9f-9e3a1664dbbf",
+    "solutionShortDescription": "intranet-hub description",
+    "isDomainIsolated": false
+  }
+}

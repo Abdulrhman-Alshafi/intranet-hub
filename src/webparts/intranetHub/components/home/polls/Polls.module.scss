@@ -1,0 +1,17 @@
+.widget { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 8px; }
+.title { font-size: 16px; font-weight: 700; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px; }
+.number { color: #64748b; }
+.addBtn { padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; &:hover { background: #1d4ed8; } }
+.showAllBtn { padding: 8px 12px; border: 1px solid #e2e8f0; background: #fff; border-radius: 10px; font-size: 13px; cursor: pointer; color: #334155; &:hover { background: #f1f5f9; } }
+.pollContent { flex: 1; }
+.pollQuestion { font-size: 15px; font-weight: 600; color: #0f172a; margin: 0 0 16px; line-height: 1.4; }
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option { border: 1px solid #e2e8f0; background: #fff; border-radius: 10px; padding: 10px 14px; cursor: pointer; text-align: left; width: 100%; transition: all 0.15s; &:hover:not(.voted) { border-color: #93c5fd; background: #eff6ff; } }
+.voted { cursor: default; }
+.optionInfo { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.optionText { font-size: 13px; color: #1e293b; }
+.optionPct { font-size: 13px; font-weight: 600; color: #2563eb; }
+.optionBarBg { height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; }
+.optionBar { height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); border-radius: 3px; }
+.totalVotes { font-size: 12px; color: #94a3b8; margin: 12px 0 0; }

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "c8d613c5-698a-4f5a-8ded-cece1963119d",
+  "alias": "IntranetHubWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportsFullBleed": true,
+  "supportedHosts": ["SharePointWebPart", "SharePointFullPage"],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Advanced" },
+    "title": { "default": "Intranet Hub" },
+    "description": { "default": "Company Intranet Hub Portal" },
+    "officeFabricIconFontName": "Globe",
+    "properties": {
+      "announcementsListName": "Announcements",
+      "kudosListName": "Kudos",
+      "kudosLikesListName": "Kudos Likes",
+      "pollsListName": "Polls",
+      "eventsListName": "Events",
+      "announcementsDescription": "Company-wide announcements and news updates",
+      "recognitionWallDescription": "Employee recognition and kudos wall",
+      "pollsDescription": "Employee engagement polls and surveys",
+      "eventsDescription": "Upcoming company events and activities",
+      "sidebarLinks": "[]"
+    }
+  }]
+}
