@@ -42,7 +42,7 @@ const RecognitionWall: React.FC = () => {
   return (
     <div className={styles.widget}>
       <div className={styles.header}>
-        <h2 className={styles.title}><span className={styles.number}>2.</span> Recognition Wall</h2>
+        <h2 className={styles.title}>Recognition Wall</h2>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className={styles.seeAllBtn} onClick={() => setShowAllModal(true)}>Kudos</button>
           <motion.button className={styles.giveBtn} onClick={() => setShowGiveModal(true)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>Give Kudos</motion.button>
@@ -52,7 +52,7 @@ const RecognitionWall: React.FC = () => {
         <div className={styles.body}>
           {eom && <EmployeeOfMonth item={eom} />}
           <div className={styles.kudosFeed}>
-            {kudos.length === 0 ? <EmptyState title="No kudos yet" description="Be the first to give kudos!" actionLabel="Give Kudos" onAction={() => setShowGiveModal(true)} /> : (
+            {kudos.length === 0 ? <EmptyState title="No kudos yet" description="Be the first to give kudos!" /> : (
               <AnimatePresence>
                 {kudos.map((item, i) => (
                   <motion.div key={item.Id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>

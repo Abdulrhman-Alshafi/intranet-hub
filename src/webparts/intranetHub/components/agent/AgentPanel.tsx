@@ -21,16 +21,18 @@ const AgentPanel: React.FC = () => {
   const [messages, setMessages] = React.useState<IChatMessage[]>([]);
   const [inputValue, setInputValue] = React.useState('');
   const [isTyping, setIsTyping] = React.useState(false);
-  const chatEndRef = React.useRef<HTMLDivElement>(null);
+  const chatAreaRef = React.useRef<HTMLDivElement>(null);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const scrollToBottom = (): void => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatAreaRef.current) {
+      chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
+    }
   };
 
   React.useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const handleSend = (text?: string): void => {
     const msg = text || inputValue.trim();
@@ -80,31 +82,40 @@ const AgentPanel: React.FC = () => {
 
   return (
     <div className={styles.panel}>
-      {/* Header */}
-      <div className={styles.header}>
-        <div className={styles.botAvatar}>
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="16" fill="url(#agent-gradient)"/>
-            <path d="M11 14C11 13.45 11.45 13 12 13C12.55 13 13 13.45 13 14C13 14.55 12.55 15 12 15C11.45 15 11 14.55 11 14Z" fill="white"/>
-            <path d="M19 14C19 13.45 19.45 13 20 13C20.55 13 21 13.45 21 14C21 14.55 20.55 15 20 15C19.45 15 19 14.55 19 14Z" fill="white"/>
-            <path d="M13 19C14 20.33 18 20.33 19 19" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M10 11V9M22 11V9M9 12C8 12 7 13 7 14V18C7 19 8 20 9 20M23 12C24 12 25 13 25 14V18C25 19 24 20 23 20" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-            <defs>
-              <linearGradient id="agent-gradient" x1="0" y1="0" x2="32" y2="32">
-                <stop stopColor="#6366f1"/>
-                <stop offset="1" stopColor="#8b5cf6"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <div className={styles.headerText}>
-          <h3 className={styles.headerTitle}>Hi! I&apos;m your AI assistant.</h3>
-          <p className={styles.headerSub}>How can I help you today?</p>
-        </div>
-      </div>
+      {/* Header – hidden once conversation starts */}
+      <AnimatePresence>
+        {messages.length === 0 && (
+          <motion.div
+            className={styles.header}
+            initial={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0, overflow: 'hidden' }}
+            transition={{ duration: 0.25 }}
+          >
+            <div className={styles.botAvatar}>
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="16" fill="url(#agent-gradient)"/>
+                <path d="M11 14C11 13.45 11.45 13 12 13C12.55 13 13 13.45 13 14C13 14.55 12.55 15 12 15C11.45 15 11 14.55 11 14Z" fill="white"/>
+                <path d="M19 14C19 13.45 19.45 13 20 13C20.55 13 21 13.45 21 14C21 14.55 20.55 15 20 15C19.45 15 19 14.55 19 14Z" fill="white"/>
+                <path d="M13 19C14 20.33 18 20.33 19 19" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M10 11V9M22 11V9M9 12C8 12 7 13 7 14V18C7 19 8 20 9 20M23 12C24 12 25 13 25 14V18C25 19 24 20 23 20" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                <defs>
+                  <linearGradient id="agent-gradient" x1="0" y1="0" x2="32" y2="32">
+                    <stop stopColor="#6366f1"/>
+                    <stop offset="1" stopColor="#8b5cf6"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div className={styles.headerText}>
+              <h3 className={styles.headerTitle}>Hi! I&apos;m your AI assistant.</h3>
+              <p className={styles.headerSub}>How can I help you today?</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Chat Area */}
-      <div className={styles.chatArea}>
+      <div className={styles.chatArea} ref={chatAreaRef}>
         {messages.length === 0 && (
           <div className={styles.suggestions}>
             {SUGGESTIONS.map((s, i) => (
@@ -159,7 +170,6 @@ const AgentPanel: React.FC = () => {
           </motion.div>
         )}
 
-        <div ref={chatEndRef} />
       </div>
 
       {/* Input Area */}

@@ -53,7 +53,7 @@ const EventsWidget: React.FC = () => {
   return (
     <div className={styles.widget}>
       <div className={styles.header}>
-        <h2 className={styles.title}><span className={styles.number}>4.</span> Events</h2>
+        <h2 className={styles.title}>Events</h2>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className={styles.showAllBtn} onClick={() => setShowAllModal(true)}>Show All</button>
           {isAdmin && (

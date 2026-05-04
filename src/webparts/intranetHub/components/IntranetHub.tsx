@@ -77,7 +77,7 @@ const IntranetHub: React.FC<IIntranetHubProps> = (props) => {
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
         <main className={styles.mainContent}>
-          <AnimatePresence mode="wait">
+          <AnimatePresence exitBeforeEnter>
             <motion.div
               key={activeTab}
               className={styles.pageContent}

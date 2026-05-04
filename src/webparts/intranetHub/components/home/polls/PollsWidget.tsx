@@ -66,7 +66,7 @@ const PollsWidget: React.FC = () => {
     <div className={styles.widget}>
       <div className={styles.header}>
         <h2 className={styles.title}>
-          <span className={styles.number}>3.</span> Polls
+          Polls
           {unanswered > 0 && <Badge count={unanswered} />}
         </h2>
         <div style={{ display: 'flex', gap: 8 }}>

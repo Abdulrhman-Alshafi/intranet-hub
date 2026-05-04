@@ -72,9 +72,7 @@ const AnnouncementsWidget: React.FC = () => {
   return (
     <div className={styles.widget}>
       <div className={styles.header}>
-        <h2 className={styles.title}>
-          <span className={styles.number}>1.</span> Announcements
-        </h2>
+        <h2 className={styles.title}>Announcements</h2>
         {isAdmin && (
           <motion.button
             className={styles.addBtn}
@@ -110,11 +108,9 @@ const AnnouncementsWidget: React.FC = () => {
           <EmptyState
             title="No announcements yet"
             description="There are no announcements to display."
-            actionLabel={isAdmin ? 'Add Announcement' : undefined}
-            onAction={isAdmin ? () => setShowAddModal(true) : undefined}
           />
         ) : (
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence>
             {announcements.slice(0, 5).map((item, i) => (
               <motion.div
                 key={item.Id}
