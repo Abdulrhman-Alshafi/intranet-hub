@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import styles from './IntranetHub.module.scss';
 import { SPFI } from '@pnp/sp';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { AadHttpClientFactory } from '@microsoft/sp-http';
 import { IntranetHubContext, IWebPartContextValue } from '../context/WebPartContext';
 import { useRole } from '../hooks/useRole';
 import { useViewportHeight } from '../hooks/useViewportHeight';
@@ -30,6 +31,9 @@ export interface IIntranetHubProps {
     polls: string;
     events: string;
   };
+  agentBackendUrl: string;
+  agentBackendClientId: string;
+  aadHttpClientFactory?: AadHttpClientFactory;
   sidebarLinks: ISidebarLink[];
   domElement: HTMLElement | null;
 }
@@ -44,7 +48,13 @@ const TAB_NAMES: Record<string, string> = {
 };
 
 const IntranetHub: React.FC<IIntranetHubProps> = (props) => {
-  const { sp, wpContext, currentUserId, listNames, widgetDescriptions, sidebarLinks, domElement } = props;
+  const { sp, wpContext, currentUserId, listNames, widgetDescriptions, agentBackendUrl, agentBackendClientId, aadHttpClientFactory, sidebarLinks, domElement } = props;
+
+  const siteId = wpContext?.pageContext?.site?.id?.toString() || '';
+  const siteUrl = wpContext?.pageContext?.site?.absoluteUrl || '';
+  const siteName = wpContext?.pageContext?.web?.title || '';
+  const pageUrl = wpContext?.pageContext?.legacyPageContext?.['serverRequestPath'] || '';
+  const pageTitle = wpContext?.pageContext?.legacyPageContext?.['pageTitle'] || '';
   const [activeTab, setActiveTab] = React.useState('home');
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
   const { role, isLoading: isRoleLoading } = useRole(sp);
@@ -92,7 +102,16 @@ const IntranetHub: React.FC<IIntranetHubProps> = (props) => {
           </AnimatePresence>
         </main>
         <aside className={styles.agentSide}>
-          <AgentPanel />
+          <AgentPanel
+            backendUrl={agentBackendUrl}
+            backendClientId={agentBackendClientId}
+            aadHttpClientFactory={aadHttpClientFactory}
+            siteId={siteId}
+            siteUrl={siteUrl}
+            siteName={siteName}
+            pageUrl={pageUrl}
+            pageTitle={pageTitle}
+          />
         </aside>
       </div>
     </IntranetHubContext.Provider>

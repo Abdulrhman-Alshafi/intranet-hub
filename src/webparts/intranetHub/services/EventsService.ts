@@ -54,6 +54,6 @@ export class EventsService {
   }
 
   public async deleteEvent(id: number): Promise<void> {
-    await this.sp.web.lists.getByTitle(this.listName).items.getById(id).recycle();
+    await this.sp.web.lists.getByTitle(this.listName).items.getById(id).delete();
   }
 }

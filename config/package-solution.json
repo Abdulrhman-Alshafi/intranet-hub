@@ -25,6 +25,12 @@
       "videoUrl": "",
       "categories": []
     },
+    "webApiPermissionRequests": [
+      {
+        "resource": "api://2e7269a2-d488-4ff7-8593-f1d3bae99893",
+        "scope": "access_as_user"
+      }
+    ],
     "features": [
       {
         "title": "intranet-hub Feature",

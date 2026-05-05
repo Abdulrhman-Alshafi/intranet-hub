@@ -7,6 +7,7 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { AadHttpClientFactory } from '@microsoft/sp-http';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { spfi, SPFx } from '@pnp/sp';
 import { SPFI } from '@pnp/sp';
@@ -30,6 +31,9 @@ export interface IIntranetHubWebPartProps {
   recognitionWallDescription: string;
   pollsDescription: string;
   eventsDescription: string;
+  // AI Agent backend
+  agentBackendUrl: string;
+  agentBackendClientId: string;
   // Sidebar
   sidebarLinks: string; // JSON string of ISidebarLink[]
   // Other tabs
@@ -81,6 +85,9 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
           polls: this.properties.pollsDescription || '',
           events: this.properties.eventsDescription || '',
         },
+        agentBackendUrl: this.properties.agentBackendUrl || 'http://localhost:8000',
+        agentBackendClientId: this.properties.agentBackendClientId || 'api://2e7269a2-d488-4ff7-8593-f1d3bae99893',
+        aadHttpClientFactory: this.context.aadHttpClientFactory as unknown as AadHttpClientFactory,
         sidebarLinks: sidebarLinks,
         domElement: this.domElement,
       }
@@ -208,7 +215,28 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
             },
           ],
         },
-        // PAGE 2: IT Support Settings
+        // PAGE 2: AI Agent Settings
+        {
+          header: { description: 'AI Agent Settings' },
+          groups: [
+            {
+              groupName: 'Backend Configuration',
+              groupFields: [
+                PropertyPaneTextField('agentBackendUrl', {
+                  label: 'Backend URL',
+                  description: 'Base URL of the AI agent FastAPI backend (e.g. http://localhost:8000)',
+                  value: this.properties.agentBackendUrl || 'http://localhost:8000',
+                }),
+                PropertyPaneTextField('agentBackendClientId', {
+                  label: 'Backend App Registration Client ID',
+                  description: 'Client ID of the Azure AD App Registration (e.g. api://2e7269a2-d488-4ff7-8593-f1d3bae99893)',
+                  value: this.properties.agentBackendClientId || 'api://2e7269a2-d488-4ff7-8593-f1d3bae99893',
+                }),
+              ],
+            },
+          ],
+        },
+        // PAGE 3: IT Support Settings
         {
           header: { description: 'IT Support Settings' },
           groups: [
@@ -228,7 +256,7 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
             },
           ],
         },
-        // PAGE 3: HR Settings
+        // PAGE 4: HR Settings
         {
           header: { description: 'HR Settings' },
           groups: [
@@ -248,7 +276,7 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
             },
           ],
         },
-        // PAGE 4: Developers Settings
+        // PAGE 5: Developers Settings
         {
           header: { description: 'Developers Settings' },
           groups: [
@@ -268,7 +296,7 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
             },
           ],
         },
-        // PAGE 5: Accounting Settings
+        // PAGE 6: Accounting Settings
         {
           header: { description: 'Accounting Settings' },
           groups: [
@@ -288,7 +316,7 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
             },
           ],
         },
-        // PAGE 6: Marketing Settings
+        // PAGE 7: Marketing Settings
         {
           header: { description: 'Marketing Settings' },
           groups: [
