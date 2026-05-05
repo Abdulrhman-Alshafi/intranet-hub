@@ -7,10 +7,11 @@ export interface IModalProps {
   onClose: () => void;
   title: string;
   size?: 'small' | 'medium' | 'large';
+  transparentBackdrop?: boolean;
   children: React.ReactNode;
 }
 
-const Modal: React.FC<IModalProps> = ({ isOpen, onClose, title, size = 'medium', children }) => {
+const Modal: React.FC<IModalProps> = ({ isOpen, onClose, title, size = 'medium', transparentBackdrop, children }) => {
   React.useEffect(() => {
     const handleEsc = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') onClose();
@@ -30,6 +31,7 @@ const Modal: React.FC<IModalProps> = ({ isOpen, onClose, title, size = 'medium',
       {isOpen && (
         <motion.div
           className={styles.backdrop}
+          style={transparentBackdrop ? { background: 'rgba(0,0,0,0.12)', backdropFilter: 'blur(4px)' } : undefined}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

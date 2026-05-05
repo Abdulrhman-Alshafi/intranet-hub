@@ -4,5 +4,6 @@ export interface IEmployeeOfMonthItem {
   EmployeeId: number;
   Month: string; // format: YYYY-MM
   Notes?: string;
+  IsHidden?: boolean;
   Created: string;
 }

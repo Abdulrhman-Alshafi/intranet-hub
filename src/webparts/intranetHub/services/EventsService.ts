@@ -46,7 +46,7 @@ export class EventsService {
       Title: data.Title,
       Description: data.Description || '',
       EventDate: data.EventDate,
-      EndDate: data.EndDate || null,
+      ...(data.EndDate ? { EndDate: data.EndDate } : {}),
       Location: data.Location || '',
       Category: data.Category || 'Company',
       Image: data.Image || '',

@@ -55,7 +55,6 @@ const EventsWidget: React.FC = () => {
       <div className={styles.header}>
         <h2 className={styles.title}>Events</h2>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className={styles.showAllBtn} onClick={() => setShowAllModal(true)}>Show All</button>
           {isAdmin && (
             <motion.button className={styles.addBtn} onClick={() => setShowAddModal(true)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               + Add
@@ -96,6 +95,10 @@ const EventsWidget: React.FC = () => {
           </AnimatePresence>
         )}
       </div>
+
+      {events.length > 1 && (
+        <button className={styles.seeAllBtn} onClick={() => setShowAllModal(true)}>See all events →</button>
+      )}
 
       <AddEventModal isOpen={showAddModal} onClose={() => setShowAddModal(false)} onAdded={loadData} />
       <AllEventsModal isOpen={showAllModal} onClose={() => setShowAllModal(false)} isAdmin={isAdmin} onRefresh={loadData} />

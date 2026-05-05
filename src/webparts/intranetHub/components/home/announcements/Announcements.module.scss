@@ -58,6 +58,8 @@
   color: #334155;
   cursor: pointer;
   transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
   &:hover { border-color: #93c5fd; background: #eff6ff; }
 }
 
@@ -84,12 +86,10 @@
   border-radius: 12px;
   cursor: pointer;
   position: relative;
-  transition: all 0.15s;
-  &:hover {
-    border-color: #e2e8f0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
+  flex: 1;
 }
+
+.hiddenCard { opacity: 0.5; }
 
 .cardImage {
   width: 72px;
@@ -100,7 +100,7 @@
   img { width: 100%; height: 100%; object-fit: cover; }
 }
 
-.cardContent { flex: 1; min-width: 0; }
+.cardContent { flex: 1; min-width: 0; overflow: hidden; }
 
 .cardTop {
   display: flex;

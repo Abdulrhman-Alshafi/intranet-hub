@@ -6,6 +6,29 @@ import { SPHttpClient } from '@microsoft/sp-http';
 import '@pnp/sp/webs';
 import '@pnp/sp/site-users';
 
+const SuggestionAvatar: React.FC<{ photoSrc: string; displayName: string }> = ({ photoSrc, displayName }) => {
+  const [err, setErr] = React.useState(false);
+  if (photoSrc && !err) {
+    return (
+      <img
+        src={photoSrc}
+        alt={displayName}
+        onError={() => setErr(true)}
+        style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+      />
+    );
+  }
+  return (
+    <div style={{
+      width: 32, height: 32, borderRadius: '50%', background: '#fde68a',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontSize: 13, fontWeight: 600, color: '#d97706', flexShrink: 0,
+    }}>
+      {displayName.charAt(0).toUpperCase()}
+    </div>
+  );
+};
+
 interface IUserSuggestion {
   displayName: string;
   loginName: string;
@@ -140,21 +163,26 @@ const SetEOMModal: React.FC<IProps> = ({ isOpen, onClose, onSet }) => {
               background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10,
               boxShadow: '0 4px 16px rgba(0,0,0,0.08)', marginTop: 4, overflow: 'hidden',
             }}>
-              {suggestions.map(s => (
-                <button
-                  key={s.loginName}
-                  onClick={() => handleSelect(s)}
-                  style={{
-                    display: 'block', width: '100%', textAlign: 'left',
-                    padding: '10px 14px', border: 'none', background: 'none',
-                    fontSize: 13, cursor: 'pointer', color: '#0f172a',
-                  }}
-                  onMouseEnter={e => { (e.target as HTMLButtonElement).style.background = '#f8fafc'; }}
-                  onMouseLeave={e => { (e.target as HTMLButtonElement).style.background = 'none'; }}
-                >
-                  {s.displayName}
-                </button>
-              ))}
+              {suggestions.map((s, i) => {
+                const email = s.loginName.includes('|') ? s.loginName.split('|').pop() || '' : s.loginName;
+                const photoSrc = email ? `${wpContext?.pageContext.web.absoluteUrl}/_layouts/15/userphoto.aspx?size=S&accountname=${encodeURIComponent(email)}` : '';
+                return (
+                  <button
+                    key={i}
+                    onClick={() => handleSelect(s)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+                      padding: '10px 14px', border: 'none', background: 'none',
+                      cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f8fafc'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'none'; }}
+                  >
+                    <SuggestionAvatar photoSrc={photoSrc} displayName={s.displayName} />
+                    <span style={{ fontSize: 14, color: '#1e293b' }}>{s.displayName}</span>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>

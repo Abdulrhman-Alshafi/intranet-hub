@@ -33,4 +33,12 @@ export class EmployeeOfMonthService {
       Notes: notes || '',
     });
   }
+
+  public async deleteEOM(id: number): Promise<void> {
+    await this.sp.web.lists.getByTitle(this.listName).items.getById(id).delete();
+  }
+
+  public async hideEOM(id: number, hidden: boolean): Promise<void> {
+    await this.sp.web.lists.getByTitle(this.listName).items.getById(id).update({ IsHidden: hidden });
+  }
 }

@@ -6,6 +6,29 @@ import { SPHttpClient } from '@microsoft/sp-http';
 import '@pnp/sp/webs';
 import '@pnp/sp/site-users';
 
+const SuggestionAvatar: React.FC<{ photoSrc: string; displayName: string }> = ({ photoSrc, displayName }) => {
+  const [err, setErr] = React.useState(false);
+  if (photoSrc && !err) {
+    return (
+      <img
+        src={photoSrc}
+        alt={displayName}
+        onError={() => setErr(true)}
+        style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+      />
+    );
+  }
+  return (
+    <div style={{
+      width: 32, height: 32, borderRadius: '50%', background: '#e0e7ff',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontSize: 13, fontWeight: 600, color: '#4f46e5', flexShrink: 0,
+    }}>
+      {displayName.charAt(0).toUpperCase()}
+    </div>
+  );
+};
+
 interface IUserSuggestion {
   displayName: string;
   loginName: string;
@@ -167,29 +190,26 @@ const GiveKudosModal: React.FC<IProps> = ({ isOpen, onClose, onAdded }) => {
               background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10,
               boxShadow: '0 4px 16px rgba(0,0,0,0.10)', overflow: 'hidden', marginTop: 2,
             }}>
-              {suggestions.map((u, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleSelect(u)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-                    padding: '10px 14px', border: 'none', background: 'none',
-                    cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#f1f5f9')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'none')}
-                >
-                  {/* Avatar circle */}
-                  <div style={{
-                    width: 32, height: 32, borderRadius: '50%', background: '#e0e7ff',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 13, fontWeight: 600, color: '#4f46e5', flexShrink: 0,
-                  }}>
-                    {u.displayName.charAt(0).toUpperCase()}
-                  </div>
-                  <span style={{ fontSize: 14, color: '#1e293b' }}>{u.displayName}</span>
-                </button>
-              ))}
+              {suggestions.map((u, i) => {
+                const email = u.loginName.includes('|') ? u.loginName.split('|').pop() || '' : u.loginName;
+                const photoSrc = email ? `${wpContext?.pageContext.web.absoluteUrl}/_layouts/15/userphoto.aspx?size=S&accountname=${encodeURIComponent(email)}` : '';
+                return (
+                  <button
+                    key={i}
+                    onClick={() => handleSelect(u)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+                      padding: '10px 14px', border: 'none', background: 'none',
+                      cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = '#f1f5f9')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                  >
+                    <SuggestionAvatar photoSrc={photoSrc} displayName={u.displayName} />
+                    <span style={{ fontSize: 14, color: '#1e293b' }}>{u.displayName}</span>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>

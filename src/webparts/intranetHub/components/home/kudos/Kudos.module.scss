@@ -4,27 +4,27 @@
 .number { color: #64748b; margin-right: 4px; }
 .giveBtn { padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; &:hover { background: #1d4ed8; } }
 .eomBtn { padding: 8px 14px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; &:hover { background: linear-gradient(135deg, #d97706, #b45309); } }
-.seeAllBtn { width: 100%; padding: 10px; border: none; background: none; color: #2563eb; font-size: 13px; font-weight: 500; cursor: pointer; text-align: center; margin-top: 4px; border-radius: 8px; &:hover { background: #eff6ff; } }
+.seeAllBtn { width: 100%; margin-top: 12px; padding: 8px 0; border: none; background: none; color: #2563eb; font-size: 13px; font-weight: 500; cursor: pointer; text-align: center; &:hover { text-decoration: underline; } }
 .body { display: flex; flex-direction: column; gap: 8px; flex: 1; min-height: 0; overflow: hidden; }
-.cardSlot { display: flex; flex-direction: column; }
-.eomCard { display: flex; gap: 10px; padding: 10px 14px; border-radius: 12px; background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 1px solid #fcd34d; align-items: flex-start; }
-.eomAvatar { width: 40px; height: 40px; border-radius: 50%; background: #fde68a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; img { width: 100%; height: 100%; object-fit: cover; } }
+.cardSlot { display: flex; flex-direction: column; flex: 0 1 33.33%; min-height: 0; }
+.eomCard { display: flex; gap: 12px; padding: 12px 14px; border-radius: 12px; background: #fff; border: 1px solid #fcd34d; align-items: center; cursor: pointer; flex: 1; }
+.eomAvatar { width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; border: none; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; img { width: 100%; height: 100%; object-fit: cover; } }
 .eomContent { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.eomBadge { font-size: 10px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 4px; padding: 1px 6px; display: inline-block; width: fit-content; }
+.eomBadge { font-size: 10px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.6px; }
 .eomName { font-size: 13px; font-weight: 700; color: #0f172a; margin: 0; }
-.eomRole { font-size: 12px; color: #64748b; margin: 0; }
+.eomRole { font-size: 12px; color: #64748b; margin: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; display: block; }
 .eomTitle { font-size: 13px; font-weight: 600; color: #64748b; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.5px; }
 .eomSection { flex: 0 0 auto; }
 .kudosFeed { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-.kudosCard { display: flex; gap: 10px; padding: 10px; border-radius: 10px; border: 1px solid #f1f5f9; transition: background 0.1s; &:hover { background: #f8fafc; } }
+.kudosCard { display: flex; gap: 10px; padding: 10px; border-radius: 10px; border: 1px solid #f1f5f9; cursor: pointer; flex: 1; align-items: center; overflow: hidden; min-width: 0; }
 .hiddenCard { opacity: 0.5; }
 .kudosAvatar { width: 36px; height: 36px; border-radius: 50%; background: #eff6ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #93c5fd; overflow: hidden; img { width: 100%; height: 100%; object-fit: cover; } }
 .personIcon { display: flex; align-items: center; justify-content: center; color: #93c5fd; }
-.kudosContent { flex: 1; min-width: 0; }
-.kudosHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; strong { font-size: 13px; color: #0f172a; } }
-.kudosTime { font-size: 11px; color: #94a3b8; }
-.kudosMsg { font-size: 12px; color: #64748b; margin: 0 0 2px; }
-.kudosRecipient { font-size: 12px; color: #2563eb; font-weight: 500; }
+.kudosContent { flex: 1; min-width: 0; overflow: hidden; }
+.kudosHeader { display: flex; justify-content: flex-start; align-items: baseline; gap: 6px; margin-bottom: 2px; strong { font-size: 13px; color: #0f172a; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; } }
+.kudosTime { font-size: 11px; color: #94a3b8; flex-shrink: 0; white-space: nowrap; }
+.kudosMsg { font-size: 12px; color: #64748b; margin: 0 0 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; display: block; }
+.kudosRecipient { font-size: 12px; color: #2563eb; font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; display: block; }
 .likeBtn { display: flex; align-items: center; gap: 4px; border: none; background: none; cursor: pointer; font-size: 12px; padding: 4px 8px; border-radius: 8px; color: #94a3b8; transition: background 0.1s, color 0.1s; &:hover { background: #fef2f2; color: #ef4444; } }
 .liked { color: #ef4444; }
 .kudosActions { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
@@ -32,3 +32,17 @@
 .adminBtn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: none; background: none; cursor: pointer; border-radius: 6px; color: #94a3b8; transition: background 0.1s, color 0.1s; &:hover { background: #f1f5f9; color: #334155; } }
 .eomActive { color: #f59e0b !important; }
 .deleteBtn { &:hover { background: #fef2f2 !important; color: #ef4444 !important; } }
+.popoverBackdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 10001; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.popoverCard { background: #fff; border-radius: 16px; padding: 24px; max-width: 480px; width: 100%; box-shadow: 0 24px 64px rgba(0,0,0,0.22); display: flex; flex-direction: column; gap: 14px; }
+.popoverHeader { display: flex; align-items: center; gap: 12px; }
+.popoverSenderInfo { flex: 1; min-width: 0; strong { font-size: 14px; color: #0f172a; display: block; } }
+.popoverTime { font-size: 12px; color: #94a3b8; }
+.popoverMsg { font-size: 14px; color: #334155; margin: 0; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+.popoverRecipient { font-size: 13px; color: #2563eb; font-weight: 600; }
+.popoverFooter { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid #f1f5f9; }
+.popoverClose { margin-left: auto; border: none; background: none; cursor: pointer; font-size: 22px; line-height: 1; color: #94a3b8; padding: 2px 6px; border-radius: 8px; flex-shrink: 0; &:hover { background: #f1f5f9; color: #334155; } }
+.eomPopoverAvatar { width: 64px; height: 64px; border-radius: 50%; background: #fde68a; border: 3px solid #f59e0b; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; img { width: 100%; height: 100%; object-fit: cover; } }
+.eomPopoverBadge { font-size: 11px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.6px; }
+.eomPopoverName { font-size: 18px; font-weight: 700; color: #0f172a; margin: 4px 0 0; }
+.eomPopoverMonth { font-size: 12px; color: #92400e; margin: 2px 0 0; }
+.eomPopoverNotes { font-size: 14px; color: #57534e; margin: 0; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }

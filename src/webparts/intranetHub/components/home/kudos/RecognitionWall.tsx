@@ -17,7 +17,7 @@ import AllKudosModal from './AllKudosModal';
 import SetEOMModal from './SetEOMModal';
 
 const RecognitionWall: React.FC = () => {
-  const { sp, wpContext, userRole, listNames } = useWebPartContext();
+  const { sp, wpContext, userRole, listNames, currentUserId } = useWebPartContext();
   const [kudos, setKudos] = React.useState<IKudosItem[]>([]);
   const [eom, setEom] = React.useState<IEmployeeOfMonthItem | undefined>(undefined);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -36,7 +36,7 @@ const RecognitionWall: React.FC = () => {
     try {
       const kudosSvc = new KudosService(sp, listNames.kudos, listNames.kudosLikes);
       const eomSvc = new EmployeeOfMonthService(sp, listNames.employeeOfMonth);
-      const [items, currentEOM] = await Promise.all([kudosSvc.getKudos(3), eomSvc.getCurrentEOM()]);
+      const [items, currentEOM] = await Promise.all([kudosSvc.getKudos(3, currentUserId), eomSvc.getCurrentEOM()]);
       setKudos(items);
       setEom(currentEOM);
     } catch (err) {
@@ -44,25 +44,43 @@ const RecognitionWall: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [sp, listNames.kudos, listNames.kudosLikes, listNames.employeeOfMonth]);
+  }, [sp, listNames.kudos, listNames.kudosLikes, listNames.employeeOfMonth, currentUserId]);
 
   React.useEffect(() => { void loadData(); }, [loadData]);
 
   const handleDelete = async (id: number): Promise<void> => {
     if (!sp) return;
+    setKudos(prev => prev.filter(k => k.Id !== id));
     try {
       const svc = new KudosService(sp, listNames.kudos, listNames.kudosLikes);
       await svc.deleteKudos(id);
-      setKudos(prev => prev.filter(k => k.Id !== id));
     } catch { /* swallow */ }
   };
 
   const handleHide = async (id: number, hidden: boolean): Promise<void> => {
     if (!sp) return;
+    setKudos(prev => prev.map(k => k.Id === id ? { ...k, IsHidden: hidden } : k));
     try {
       const svc = new KudosService(sp, listNames.kudos, listNames.kudosLikes);
       await svc.hideKudos(id, hidden);
-      setKudos(prev => prev.map(k => k.Id === id ? { ...k, IsHidden: hidden } : k));
+    } catch { /* swallow */ }
+  };
+
+  const handleEOMDelete = async (id: number): Promise<void> => {
+    if (!sp) return;
+    setEom(undefined);
+    try {
+      const svc = new EmployeeOfMonthService(sp, listNames.employeeOfMonth);
+      await svc.deleteEOM(id);
+    } catch { /* swallow */ }
+  };
+
+  const handleEOMHide = async (id: number, hidden: boolean): Promise<void> => {
+    if (!sp) return;
+    setEom(prev => prev ? { ...prev, IsHidden: hidden } : prev);
+    try {
+      const svc = new EmployeeOfMonthService(sp, listNames.employeeOfMonth);
+      await svc.hideEOM(id, hidden);
     } catch { /* swallow */ }
   };
 
@@ -89,7 +107,7 @@ const RecognitionWall: React.FC = () => {
           <div className={styles.body}>
             {eom && (
               <div className={styles.cardSlot}>
-                <EmployeeOfMonth item={eom} siteUrl={siteUrl} />
+              <EmployeeOfMonth item={eom} siteUrl={siteUrl} isAdmin={isAdmin} onDelete={handleEOMDelete} onHide={handleEOMHide} />
               </div>
             )}
             {displayedKudos.length === 0 && !eom ? (
@@ -122,7 +140,7 @@ const RecognitionWall: React.FC = () => {
         </>
       )}
       <GiveKudosModal isOpen={showGiveModal} onClose={() => setShowGiveModal(false)} onAdded={loadData} />
-      <AllKudosModal isOpen={showAllModal} onClose={() => setShowAllModal(false)} />
+      <AllKudosModal isOpen={showAllModal} onClose={() => setShowAllModal(false)} onRefresh={loadData} />
       <SetEOMModal isOpen={showEOMModal} onClose={() => setShowEOMModal(false)} onSet={loadData} />
     </div>
   );

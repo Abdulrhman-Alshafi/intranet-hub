@@ -3,8 +3,9 @@
 .title { font-size: 16px; font-weight: 700; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px; }
 .number { color: #64748b; }
 .addBtn { padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; &:hover { background: #1d4ed8; } }
-.showAllBtn { padding: 8px 12px; border: 1px solid #e2e8f0; background: #fff; border-radius: 10px; font-size: 13px; cursor: pointer; color: #334155; &:hover { background: #f1f5f9; } }
-.pollContent { flex: 1; }
+.seeAllBtn { width: 100%; margin-top: 12px; padding: 8px 0; border: none; background: none; color: #2563eb; font-size: 13px; font-weight: 500; cursor: pointer; text-align: center; &:hover { text-decoration: underline; } }
+.showAllOptionsBtn { margin-top: 10px; padding: 6px 14px; border: 1px solid #bfdbfe; background: #eff6ff; color: #2563eb; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; width: 100%; &:hover { background: #dbeafe; } }
+.pollContent { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
 .pollQuestion { font-size: 15px; font-weight: 600; color: #0f172a; margin: 0 0 16px; line-height: 1.4; }
 .options { display: flex; flex-direction: column; gap: 10px; }
 .option { border: 1px solid #e2e8f0; background: #fff; border-radius: 10px; padding: 10px 14px; cursor: pointer; text-align: left; width: 100%; transition: all 0.15s; &:hover:not(.voted) { border-color: #93c5fd; background: #eff6ff; } }

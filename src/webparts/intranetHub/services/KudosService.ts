@@ -16,14 +16,42 @@ export class KudosService {
     this.likesListName = likesListName;
   }
 
-  public async getKudos(top: number = 20): Promise<IKudosItem[]> {
+  public async getKudos(top: number = 20, currentUserId?: number): Promise<IKudosItem[]> {
     const items = await this.sp.web.lists.getByTitle(this.kudosListName).items
       .select('Id', 'Title', 'RecipientId', 'Recipient/Title', 'Recipient/EMail', 'GivenById', 'GivenBy/Title', 'GivenBy/EMail', 'IsHidden', 'ProfileImage', 'Created')
       .expand('Recipient', 'GivenBy')
       .orderBy('Created', false)
       .top(top)();
 
-    return items as IKudosItem[];
+    const kudosItems = items as IKudosItem[];
+    if (kudosItems.length === 0) return kudosItems;
+
+    try {
+      const ids = kudosItems.map(k => k.Id);
+      const allLikes = await this.sp.web.lists.getByTitle(this.likesListName).items
+        .select('KudosItemId', 'LikedById')
+        .filter(ids.map(id => `KudosItemId eq ${id}`).join(' or '))
+        .top(5000)();
+
+      const countMap: Record<number, number> = {};
+      const likedByMe: Record<number, boolean> = {};
+      for (const like of allLikes) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const kid = (like as any).KudosItemId as number;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const likedBy = (like as any).LikedById as number;
+        countMap[kid] = (countMap[kid] || 0) + 1;
+        if (currentUserId && likedBy === currentUserId) likedByMe[kid] = true;
+      }
+
+      return kudosItems.map(k => ({
+        ...k,
+        LikesCount: countMap[k.Id] || 0,
+        IsLikedByMe: likedByMe[k.Id] || false,
+      }));
+    } catch {
+      return kudosItems;
+    }
   }
 
   public async addKudos(data: { Title: string; RecipientId: number }): Promise<void> {

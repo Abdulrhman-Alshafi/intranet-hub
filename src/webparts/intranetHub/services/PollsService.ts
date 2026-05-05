@@ -14,13 +14,23 @@ export class PollsService {
   }
 
   public async getLatestPoll(): Promise<IPollItem | null> {
-    const items = await this.sp.web.lists.getByTitle(this.listName).items
+    // First try pinned (IsLatest=true)
+    const pinned = await this.sp.web.lists.getByTitle(this.listName).items
       .select('Id', 'Title', 'Options', 'IsActive', 'IsVisible', 'IsLatest', 'TotalVotes', 'VotedUsers', 'Created')
       .filter('IsLatest eq 1 and IsVisible eq 1')
       .orderBy('Created', false)
       .top(1)();
 
-    return items.length > 0 ? items[0] as IPollItem : null;
+    if (pinned.length > 0) return pinned[0] as IPollItem;
+
+    // Fall back to newest visible poll
+    const newest = await this.sp.web.lists.getByTitle(this.listName).items
+      .select('Id', 'Title', 'Options', 'IsActive', 'IsVisible', 'IsLatest', 'TotalVotes', 'VotedUsers', 'Created')
+      .filter('IsVisible eq 1')
+      .orderBy('Created', false)
+      .top(1)();
+
+    return newest.length > 0 ? newest[0] as IPollItem : null;
   }
 
   public async getAllPolls(): Promise<IPollItem[]> {
@@ -77,29 +87,38 @@ export class PollsService {
   }
 
   public async addPoll(data: { Title: string; Options: IPollOption[] }): Promise<void> {
+    // Unpin any currently pinned poll
+    const currentPinned = await this.sp.web.lists.getByTitle(this.listName).items
+      .filter('IsLatest eq 1')
+      .top(10)();
+    for (const item of currentPinned) {
+      await this.sp.web.lists.getByTitle(this.listName).items.getById(item.Id).update({ IsLatest: false });
+    }
+
     await this.sp.web.lists.getByTitle(this.listName).items.add({
       Title: data.Title,
       Options: JSON.stringify(data.Options),
       IsActive: true,
       IsVisible: true,
-      IsLatest: false,
+      IsLatest: true,
       TotalVotes: 0,
       VotedUsers: '[]',
     });
   }
 
   public async setLatest(pollId: number): Promise<void> {
-    // Unset all current latest
+    // Unpin all current
     const currentLatest = await this.sp.web.lists.getByTitle(this.listName).items
       .filter('IsLatest eq 1')
       .top(10)();
-
     for (const item of currentLatest) {
       await this.sp.web.lists.getByTitle(this.listName).items.getById(item.Id).update({ IsLatest: false });
     }
-
-    // Set new latest
     await this.sp.web.lists.getByTitle(this.listName).items.getById(pollId).update({ IsLatest: true });
+  }
+
+  public async clearLatest(pollId: number): Promise<void> {
+    await this.sp.web.lists.getByTitle(this.listName).items.getById(pollId).update({ IsLatest: false });
   }
 
   public async toggleVisibility(pollId: number, isVisible: boolean): Promise<void> {
@@ -108,5 +127,13 @@ export class PollsService {
 
   public async deletePoll(pollId: number): Promise<void> {
     await this.sp.web.lists.getByTitle(this.listName).items.getById(pollId).recycle();
+  }
+
+  public async getVisibleCount(): Promise<number> {
+    const items = await this.sp.web.lists.getByTitle(this.listName).items
+      .select('Id')
+      .filter('IsVisible eq 1')
+      .top(500)();
+    return items.length;
   }
 }
