@@ -11,6 +11,9 @@ interface ISidebarProps {
   onToggleCollapse: () => void;
 }
 
+// Asset paths for Olive icons
+const OLIVE_DARK_ICON_URL = require('../../assets/olive-dark.svg');
+
 const ICON_MAP: Record<string, React.ReactNode> = {
   Home: (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10L10 3L17 10M5 8.5V16C5 16.55 5.45 17 6 17H8.5V12.5H11.5V17H14C14.55 17 15 16.55 15 16V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -86,6 +89,33 @@ const Sidebar: React.FC<ISidebarProps> = ({ links, activeTab, onTabChange, isCol
             </AnimatePresence>
           </motion.button>
         ))}
+        
+        <motion.a
+          href="https://employee.olivehr.ai/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.linkBtn}
+          whileHover={{ x: 2 }}
+          whileTap={{ scale: 0.98 }}
+          title={isCollapsed ? 'Olive' : undefined}
+        >
+          <span className={styles.icon}>
+            <img src={OLIVE_DARK_ICON_URL} alt="Olive HR" style={{ width: 20, height: 20, objectFit: 'contain' }} />
+          </span>
+          <AnimatePresence>
+            {!isCollapsed && (
+              <motion.span
+                className={styles.label}
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                Olive
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.a>
       </div>
     </motion.nav>
   );

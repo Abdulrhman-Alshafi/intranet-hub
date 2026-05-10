@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import styles from './Modal.module.scss';
 
@@ -26,7 +27,11 @@ const Modal: React.FC<IModalProps> = ({ isOpen, onClose, title, size = 'medium',
     };
   }, [isOpen, onClose]);
 
-  return (
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
@@ -60,7 +65,8 @@ const Modal: React.FC<IModalProps> = ({ isOpen, onClose, title, size = 'medium',
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 

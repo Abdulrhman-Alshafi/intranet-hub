@@ -16,6 +16,14 @@ export interface IWebPartContextValue {
     polls: string;
     events: string;
     employeeOfMonth: string;
+    helpDeskTeam: string;
+    helpDeskFaqs: string;
+  };
+  itSupportConfig: {
+    ticketLinkAddUrl: string;
+    ticketLinkAddTitle: string;
+    ticketLinkAllUrl: string;
+    ticketLinkAllTitle: string;
   };
   widgetDescriptions: {
     announcements: string;
@@ -38,6 +46,14 @@ const defaultContextValue: IWebPartContextValue = {
     polls: 'Polls',
     events: 'Events',
     employeeOfMonth: 'Employee of Month',
+    helpDeskTeam: 'Help Desk Team',
+    helpDeskFaqs: 'Help Desk FAQs',
+  },
+  itSupportConfig: {
+    ticketLinkAddUrl: '',
+    ticketLinkAddTitle: '',
+    ticketLinkAllUrl: '',
+    ticketLinkAllTitle: '',
   },
   widgetDescriptions: {
     announcements: '',

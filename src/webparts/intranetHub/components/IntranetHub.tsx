@@ -12,6 +12,7 @@ import Sidebar from './sidebar/Sidebar';
 import AgentPanel from './agent/AgentPanel';
 import HomePage from './home/HomePage';
 import ComingSoon from './comingsoon/ComingSoon';
+import ITSupportPage from './it-support/ITSupportPage';
 
 export interface IIntranetHubProps {
   sp: SPFI | null;
@@ -24,6 +25,8 @@ export interface IIntranetHubProps {
     polls: string;
     events: string;
     employeeOfMonth: string;
+    helpDeskTeam: string;
+    helpDeskFaqs: string;
   };
   widgetDescriptions: {
     announcements: string;
@@ -35,6 +38,10 @@ export interface IIntranetHubProps {
   agentBackendClientId: string;
   aadHttpClientFactory?: AadHttpClientFactory;
   sidebarLinks: ISidebarLink[];
+  ticketLinkAddUrl: string;
+  ticketLinkAddTitle: string;
+  ticketLinkAllUrl: string;
+  ticketLinkAllTitle: string;
   domElement: HTMLElement | null;
 }
 
@@ -48,7 +55,7 @@ const TAB_NAMES: Record<string, string> = {
 };
 
 const IntranetHub: React.FC<IIntranetHubProps> = (props) => {
-  const { sp, wpContext, currentUserId, listNames, widgetDescriptions, agentBackendUrl, agentBackendClientId, aadHttpClientFactory, sidebarLinks, domElement } = props;
+  const { sp, wpContext, currentUserId, listNames, widgetDescriptions, agentBackendUrl, agentBackendClientId, aadHttpClientFactory, sidebarLinks, ticketLinkAddUrl, ticketLinkAddTitle, ticketLinkAllUrl, ticketLinkAllTitle, domElement } = props;
 
   const siteId = wpContext?.pageContext?.site?.id?.toString() || '';
   const siteUrl = wpContext?.pageContext?.site?.absoluteUrl || '';
@@ -68,12 +75,22 @@ const IntranetHub: React.FC<IIntranetHubProps> = (props) => {
     isRoleLoading,
     listNames,
     widgetDescriptions,
-  }), [sp, wpContext, role, currentUserId, isRoleLoading, listNames, widgetDescriptions]);
+    itSupportConfig: {
+      ticketLinkAddUrl,
+      ticketLinkAddTitle,
+      ticketLinkAllUrl,
+      ticketLinkAllTitle,
+    }
+  }), [sp, wpContext, role, currentUserId, isRoleLoading, listNames, widgetDescriptions, ticketLinkAddUrl, ticketLinkAddTitle, ticketLinkAllUrl, ticketLinkAllTitle]);
 
   const renderContent = (): React.ReactNode => {
-    if (activeTab === 'home') {
+    const tabLower = activeTab.toLowerCase();
+    if (tabLower === 'home') {
       return <HomePage />;
     }
+    /* if (tabLower === 'it-support' || tabLower === 'itsupport' || tabLower === 'it support') {
+      return <ITSupportPage />;
+    } */
     return <ComingSoon tabName={TAB_NAMES[activeTab] || activeTab} />;
   };
 

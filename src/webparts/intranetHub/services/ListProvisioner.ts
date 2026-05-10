@@ -75,6 +75,23 @@ const LIST_DEFINITIONS: Record<string, IListDefinition> = {
       { title: 'Month', internalName: 'Month', type: 'Text', required: true },
       { title: 'Notes', internalName: 'Notes', type: 'Note' },
     ]
+  },
+  helpDeskTeam: {
+    title: 'Help Desk Team',
+    fields: [
+      { title: 'Member', internalName: 'Member', type: 'User', required: true },
+      { title: 'Role', internalName: 'Role', type: 'Text' },
+    ]
+  },
+  helpDeskFaqs: {
+    title: 'Help Desk FAQs',
+    fields: [
+      { title: 'Question', internalName: 'Question', type: 'Note', richText: true, required: true },
+      { title: 'Answer', internalName: 'Answer', type: 'Note', richText: true, required: true },
+      { title: 'Category', internalName: 'Category', type: 'Choice', choices: ['General', 'Hardware', 'Software', 'Network', 'Accounts'] },
+      { title: 'Order', internalName: 'Order', type: 'Number', defaultValue: '0' },
+      { title: 'IsActive', internalName: 'IsActive', type: 'Boolean', defaultValue: '1' },
+    ]
   }
 };
 

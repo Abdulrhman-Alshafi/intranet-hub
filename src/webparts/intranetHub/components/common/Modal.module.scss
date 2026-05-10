@@ -11,6 +11,10 @@
   justify-content: center;
   z-index: 10000;
   padding: 24px;
+  
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
 }
 
 .modal {
@@ -21,6 +25,10 @@
   display: flex;
   flex-direction: column;
   overflow: visible;
+
+  @media (max-width: 600px) {
+    max-height: 90vh;
+  }
 }
 
 .small {
@@ -77,4 +85,8 @@
   padding: 24px;
   overflow-y: auto;
   flex: 1;
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
 }

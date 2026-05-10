@@ -26,6 +26,9 @@ export interface IIntranetHubWebPartProps {
   pollsListName: string;
   eventsListName: string;
   employeeOfMonthListName: string;
+  helpDeskTeamListName: string;
+  helpDeskFaqsListName: string;
+
   // Widget descriptions for AI agent
   announcementsDescription: string;
   recognitionWallDescription: string;
@@ -47,6 +50,11 @@ export interface IIntranetHubWebPartProps {
   developersDescription: string;
   accountingDescription: string;
   marketingDescription: string;
+  // IT Support Specific
+  ticketLinkAddUrl: string;
+  ticketLinkAddTitle: string;
+  ticketLinkAllUrl: string;
+  ticketLinkAllTitle: string;
 }
 
 export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetHubWebPartProps> {
@@ -78,6 +86,8 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
           polls: this.properties.pollsListName || 'Polls',
           events: this.properties.eventsListName || 'Events',
           employeeOfMonth: this.properties.employeeOfMonthListName || 'Employee of Month',
+          helpDeskTeam: this.properties.helpDeskTeamListName || 'Help Desk Team',
+          helpDeskFaqs: this.properties.helpDeskFaqsListName || 'Help Desk FAQs',
         },
         widgetDescriptions: {
           announcements: this.properties.announcementsDescription || '',
@@ -89,6 +99,10 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
         agentBackendClientId: this.properties.agentBackendClientId || 'api://2e7269a2-d488-4ff7-8593-f1d3bae99893',
         aadHttpClientFactory: this.context.aadHttpClientFactory as unknown as AadHttpClientFactory,
         sidebarLinks: sidebarLinks,
+        ticketLinkAddUrl: this.properties.ticketLinkAddUrl || 'https://example.com/add-ticket',
+        ticketLinkAddTitle: this.properties.ticketLinkAddTitle || 'Add Ticket',
+        ticketLinkAllUrl: this.properties.ticketLinkAllUrl || 'https://example.com/all-tickets',
+        ticketLinkAllTitle: this.properties.ticketLinkAllTitle || 'See All Tickets',
         domElement: this.domElement,
       }
     );
@@ -115,6 +129,8 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
           polls: this.properties.pollsListName || 'Polls',
           events: this.properties.eventsListName || 'Events',
           employeeOfMonth: this.properties.employeeOfMonthListName || 'Employee of Month',
+          helpDeskFaqs: this.properties.helpDeskFaqsListName || 'Help Desk FAQs',
+
         });
         this._provisioned = true;
       }
@@ -170,6 +186,14 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
                 PropertyPaneTextField('eventsListName', {
                   label: 'Events List Name',
                   value: this.properties.eventsListName || 'Events',
+                }),
+                PropertyPaneTextField('helpDeskTeamListName', {
+                  label: 'Help Desk Team List Name',
+                  value: this.properties.helpDeskTeamListName || 'Help Desk Team',
+                }),
+                PropertyPaneTextField('helpDeskFaqsListName', {
+                  label: 'Help Desk FAQs List Name',
+                  value: this.properties.helpDeskFaqsListName || 'Help Desk FAQs',
                 }),
               ],
             },
@@ -251,6 +275,27 @@ export default class IntranetHubWebPart extends BaseClientSideWebPart<IIntranetH
                   label: 'Tab Description',
                   multiline: true,
                   rows: 3,
+                }),
+              ],
+            },
+            {
+              groupName: 'Submit a Ticket Links',
+              groupFields: [
+                PropertyPaneTextField('ticketLinkAddTitle', {
+                  label: 'Add Ticket Title',
+                  value: this.properties.ticketLinkAddTitle || 'Add Ticket',
+                }),
+                PropertyPaneTextField('ticketLinkAddUrl', {
+                  label: 'Add Ticket URL',
+                  value: this.properties.ticketLinkAddUrl || 'https://example.com/add-ticket',
+                }),
+                PropertyPaneTextField('ticketLinkAllTitle', {
+                  label: 'See All Tickets Title',
+                  value: this.properties.ticketLinkAllTitle || 'See All Tickets',
+                }),
+                PropertyPaneTextField('ticketLinkAllUrl', {
+                  label: 'See All Tickets URL',
+                  value: this.properties.ticketLinkAllUrl || 'https://example.com/all-tickets',
                 }),
               ],
             },

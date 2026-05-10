@@ -36,8 +36,34 @@ export class AgentApiService {
     console.error('[AgentApiService] Error:', error);
     if (error instanceof Error) throw error;
     if (typeof error === 'string') throw new Error(error);
-    if (error && typeof error === 'object') throw new Error(JSON.stringify(error));
+    if (error && typeof error === 'object') {
+      const maybeMsg = (error as any).message || (error as any).detail || JSON.stringify(error);
+      throw new Error(maybeMsg);
+    }
     throw new Error('An unknown error occurred');
+  }
+
+  private async withRetry<T>(operation: () => Promise<T>, maxRetries = 3, baseDelayMs = 500): Promise<T> {
+    let attempt = 0;
+    while (true) {
+      try {
+        return await operation();
+      } catch (error) {
+        attempt++;
+        if (attempt >= maxRetries) {
+          throw error;
+        }
+        
+        // Don't retry on 400 or 401 client errors, if we can detect them
+        if (error instanceof Error && (error.message.includes('HTTP 400') || error.message.includes('HTTP 401'))) {
+          throw error;
+        }
+        
+        const delay = baseDelayMs * Math.pow(2, attempt - 1);
+        console.warn(`[AgentApiService] Operation failed. Retrying attempt ${attempt}/${maxRetries} in ${delay}ms...`, error);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
   }
 
   private async parseHttpError(response: Response): Promise<string> {
@@ -83,16 +109,19 @@ export class AgentApiService {
 
       const client = await this.getClient();
       let response: Response;
-      if (client) {
-        response = await client.post(
-          endpoint,
-          AadHttpClient.configurations.v1,
-          { headers, body: JSON.stringify(requestBody) }
-        ) as unknown as Response;
-      } else {
-        // Local dev: plain fetch (no auth — backend must be running without auth)
-        response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(requestBody) });
-      }
+      
+      response = await this.withRetry(async () => {
+        if (client) {
+          return await client.post(
+            endpoint,
+            AadHttpClient.configurations.v1,
+            { headers, body: JSON.stringify(requestBody) }
+          ) as unknown as Response;
+        } else {
+          // Local dev: plain fetch (no auth — backend must be running without auth)
+          return await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(requestBody) });
+        }
+      });
 
       if (!response.ok) {
         const msg = await this.parseHttpError(response);
@@ -131,15 +160,18 @@ export class AgentApiService {
 
       const client = await this.getClient();
       let response: Response;
-      if (client) {
-        response = await client.post(
-          endpoint,
-          AadHttpClient.configurations.v1,
-          { headers, body: formData }
-        ) as unknown as Response;
-      } else {
-        response = await fetch(endpoint, { method: 'POST', headers, body: formData });
-      }
+      
+      response = await this.withRetry(async () => {
+        if (client) {
+          return await client.post(
+            endpoint,
+            AadHttpClient.configurations.v1,
+            { headers, body: formData }
+          ) as unknown as Response;
+        } else {
+          return await fetch(endpoint, { method: 'POST', headers, body: formData });
+        }
+      });
 
       if (!response.ok) {
         const msg = await this.parseHttpError(response);

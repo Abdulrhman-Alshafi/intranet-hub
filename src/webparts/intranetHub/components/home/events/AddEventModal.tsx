@@ -3,6 +3,7 @@ import Modal from '../../common/Modal';
 import { useWebPartContext } from '../../../context/WebPartContext';
 import { EventsService } from '../../../services/EventsService';
 import { EVENT_CATEGORIES } from '../../../models/IEventItem';
+import styles from './AddEventModal.module.scss';
 
 interface IProps { isOpen: boolean; onClose: () => void; onAdded: () => void; }
 
@@ -58,39 +59,65 @@ const AddEventModal: React.FC<IProps> = ({ isOpen, onClose, onAdded }) => {
     }
   };
 
-  const f: React.CSSProperties = { width: '100%', padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 14, background: '#f8fafc', outline: 'none', boxSizing: 'border-box' };
-  const l: React.CSSProperties = { display: 'block', marginBottom: 6, fontSize: 13, fontWeight: 600, color: '#334155' };
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Add Event" size="medium">
-      <form onSubmit={(e) => { e.preventDefault(); void handleSubmit(e); }} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         {submitError && (
-          <p style={{ margin: 0, fontSize: 13, color: '#dc2626', padding: '10px 14px', background: '#fef2f2', borderRadius: 8, border: '1px solid #fecaca' }}>
+          <p className={styles.error}>
             ⚠ {submitError}
           </p>
         )}
-        <div><label style={l}>Title *</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} style={f} placeholder="Event name" /></div>
+        
+        <div>
+          <label className={styles.label}>Title *</label>
+          <input type="text" value={title} onChange={e => setTitle(e.target.value)} className={styles.input} placeholder="Event name" />
+        </div>
 
         {/* Start Date & Time - separate inputs for SPFx compatibility */}
-        <div style={{ display: 'flex', gap: 12 }}>
-          <div style={{ flex: 1 }}><label style={l}>Start Date *</label><input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} style={f} /></div>
-          <div style={{ flex: 1 }}><label style={l}>Start Time</label><input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} style={f} /></div>
+        <div className={styles.row}>
+          <div className={styles.col}>
+            <label className={styles.label}>Start Date *</label>
+            <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className={styles.input} />
+          </div>
+          <div className={styles.col}>
+            <label className={styles.label}>Start Time</label>
+            <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} className={styles.input} />
+          </div>
         </div>
 
         {/* End Date & Time */}
-        <div style={{ display: 'flex', gap: 12 }}>
-          <div style={{ flex: 1 }}><label style={l}>End Date</label><input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} style={f} /></div>
-          <div style={{ flex: 1 }}><label style={l}>End Time</label><input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} style={f} /></div>
+        <div className={styles.row}>
+          <div className={styles.col}>
+            <label className={styles.label}>End Date</label>
+            <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className={styles.input} />
+          </div>
+          <div className={styles.col}>
+            <label className={styles.label}>End Time</label>
+            <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} className={styles.input} />
+          </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 12 }}>
-          <div style={{ flex: 1 }}><label style={l}>Location</label><input type="text" value={location} onChange={e => setLocation(e.target.value)} style={f} placeholder="Venue or link" /></div>
-          <div style={{ flex: 1 }}><label style={l}>Category</label><select value={category} onChange={e => setCategory(e.target.value)} style={f}>{EVENT_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+        <div className={styles.row}>
+          <div className={styles.col}>
+            <label className={styles.label}>Location</label>
+            <input type="text" value={location} onChange={e => setLocation(e.target.value)} className={styles.input} placeholder="Venue or link" />
+          </div>
+          <div className={styles.col}>
+            <label className={styles.label}>Category</label>
+            <select value={category} onChange={e => setCategory(e.target.value)} className={styles.input}>
+              {EVENT_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
         </div>
-        <div><label style={l}>Description</label><textarea value={description} onChange={e => setDescription(e.target.value)} style={{ ...f, minHeight: 80 }} placeholder="Event details" /></div>
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-          <button type="button" onClick={onClose} style={{ padding: '10px 20px', border: '1px solid #e2e8f0', borderRadius: 10, background: '#fff', fontSize: 14, cursor: 'pointer' }}>Cancel</button>
-          <button type="submit" disabled={isSubmitting} style={{ padding: '10px 24px', border: 'none', borderRadius: 10, background: '#2563eb', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer', opacity: isSubmitting ? 0.7 : 1 }}>
+        
+        <div>
+          <label className={styles.label}>Description</label>
+          <textarea value={description} onChange={e => setDescription(e.target.value)} className={`${styles.input} ${styles.textarea}`} placeholder="Event details" />
+        </div>
+        
+        <div className={styles.actions}>
+          <button type="button" onClick={onClose} className={styles.cancelBtn}>Cancel</button>
+          <button type="submit" disabled={isSubmitting} className={styles.submitBtn}>
             {isSubmitting ? 'Adding...' : 'Add Event'}
           </button>
         </div>
@@ -100,3 +127,4 @@ const AddEventModal: React.FC<IProps> = ({ isOpen, onClose, onAdded }) => {
 };
 
 export default AddEventModal;
+
